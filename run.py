@@ -1,5 +1,5 @@
 #!flask/bin/python
-
+# -*- coding: utf-8 -*-
 """Run cloudapp"""
 
 from cloudapp import app
