@@ -16,6 +16,7 @@ from cloudapp import app
 ## experiment name
 exp_name = "exp_default"
 
+exp_name_file = "/tmp/exp_name.txt"
 
 # tests
 @app.route('/test2')
@@ -25,15 +26,24 @@ def test2():
 # set exp_name
 @app.route('/exp/nameset/<string:exp_name_in>')
 def exp_nameset(exp_name_in):
-    global exp_name
+    global exp_name, exp_name_file
     exp_name = exp_name_in
+
+    # exp_name using file
+    cmd = """echo "{exp_name}" > {exp_name_file}""".format(exp_name=exp_name_in, exp_name_file=exp_name_file)
+    os.system(cmd)
     return "ok"
 
 # get exp_name
 @app.route('/exp/nameget')
 def exp_nameget():
-    global exp_name
-    return exp_name
+    global exp_name, exp_name_file
+
+    # exp_name using file
+    f = open(exp_name_file, 'r')
+    name = f.readline()
+    f.close()
+    return name
 
 # save_log
 def save_log(x):

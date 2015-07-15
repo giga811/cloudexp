@@ -8,7 +8,7 @@ CloudApp
 from flask import Flask
 
 # configuration
-DEBUG = True
+# DEBUG = True
 SECRET_KEY = 'cloudapp'
 
 # create our little application :)
