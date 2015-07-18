@@ -15,4 +15,4 @@ SECRET_KEY = 'cloudapp'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-from cloudapp import controllers, exp_controllers
+from cloudapp import controllers, exp_controllers, lb_controllers

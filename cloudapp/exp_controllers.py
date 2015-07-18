@@ -48,7 +48,7 @@ def exp_nameget():
 # save_log
 def save_log(x):
     # write to file
-    global exp_name
+    exp_name = exp_nameget()
     cmd = """echo "`date +"%D %T"`,{x}" >> log/{exp_name}.log""".format(x=x, exp_name=exp_name)
     os.system(cmd)
     return True
@@ -78,7 +78,7 @@ def calc_pi(n):
 
 def calculation(x):
     for i in range(x):
-        calc_pi(100)
+        calc_pi(10)
     return x
 
 
@@ -89,7 +89,7 @@ def exp_exp1(x):
     # x = gen_var()
 
     # calling save log functions
-    save_state = save_log(x)
+    # save_state = save_log(x)
 
     # calculation using x
     result = calculation(x)
