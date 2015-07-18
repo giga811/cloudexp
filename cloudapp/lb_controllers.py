@@ -18,7 +18,8 @@ import requests as rq
 # lb variables
 
 NODES=["10.0.100." + str(i) for i in range(3, 23)]
-# NODES = ["172.20.50.139", "172.20.50.140", "172.20.50.139", "172.20.50.140", "172.20.50.139"]
+NODES.remove("10.0.100.18")
+# NODES = ["172.20.50.139", "172.20.50.140"] * 10
 N = len(NODES)
 
 # edges between self and other
@@ -86,7 +87,7 @@ def decrement(this_node, n):
 def send_req(node, x):
     global NODES
     url = "http://" + NODES[node] + "/exp/exp1/req/" + str(x)
-    rq.get(url)
+    rq.head(url,allow_redirects=False)
     return "ok"
 
 
@@ -110,7 +111,6 @@ def brs(x):
     increment(sample_node, load_n)
     # print EDGES
 
-    calculation(x)
     return str(x)
 
 
