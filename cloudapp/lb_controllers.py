@@ -17,8 +17,8 @@ import requests as rq
 
 # lb variables
 
-# NODES=["10.0.100." + str(i) for i in range(3, 23)]
-NODES = ["172.20.50.139", "172.20.50.140", "172.20.50.139", "172.20.50.140", "172.20.50.139"]
+NODES=["10.0.100." + str(i) for i in range(3, 23)]
+# NODES = ["172.20.50.139", "172.20.50.140", "172.20.50.139", "172.20.50.140", "172.20.50.139"]
 N = len(NODES)
 
 # edges between self and other
@@ -40,7 +40,7 @@ def random_sample(start_node):
     return end_node
 
 def deledge(node1, node2):
-    print "deledge", node1, node2
+    # print "deledge", node1, node2
     global EDGES, N, WALK
     if node1 == node2:
         return
@@ -50,7 +50,7 @@ def deledge(node1, node2):
         EDGES[node2].remove(node1)
 
 def addedge(node1, node2):
-    print "addedge", node1, node2
+    # print "addedge", node1, node2
     global EDGES, N, WALK
     if node1 == node2:
         return
@@ -100,18 +100,18 @@ def brs(x):
 
     load_n = int(float(x) / 200 * N)
 
-    print start_node, sample_node, load_n
-    print EDGES
+    # print start_node, sample_node, load_n
+    # print EDGES
     decrement(sample_node, load_n)
-    print EDGES
+    # print EDGES
 
     send_req(sample_node, x)
 
     increment(sample_node, load_n)
-    print EDGES
+    # print EDGES
 
     calculation(x)
-    return "ok"
+    return str(x)
 
 
 
