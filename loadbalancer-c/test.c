@@ -157,11 +157,10 @@ void biased_random_sample(int x){
 
     int load_n = (int)( x / 200.0 * N);
 
-    print_edge();
     decrement(sample_node, load_n);
 
     send_req(sample_node, x);
-    print_edge();
+
     increment(sample_node, load_n);
 
     return;

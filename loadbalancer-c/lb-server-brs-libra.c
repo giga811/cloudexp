@@ -66,16 +66,39 @@ void prerun(){
         strcpy(STRX[i], itoa(i+1, 10));
     }
     // nodes
-    for (i = 0; i < 21; i ++){
-        if ( i+3 == 18)
-            continue;
-        char *str;
-        str = (char *)calloc(20, sizeof(char));
-        strcpy(str, "10.0.100.");
-        strcat(str, itoa(i+3, 10));
-        NODES[index] = str;
-        index ++;
+    // for (i = 0; i < 21; i ++){
+    //     if ( i+3 == 18)
+    //         continue;
+    //     char *str;
+    //     str = (char *)calloc(20, sizeof(char));
+    //     strcpy(str, "10.0.100.");
+    //     strcat(str, itoa(i+3, 10));
+    //     NODES[index] = str;
+    //     index ++;
+    // }
+    for (i = 0; i < N; i ++){
+        NODES[i] = (char *)calloc(20, sizeof(char));
     }
+    strcpy( NODES[0], "172.20.50.163");
+    strcpy( NODES[1], "172.20.50.156");
+    strcpy( NODES[2], "172.20.50.164");
+    strcpy( NODES[3], "172.20.50.157");
+    strcpy( NODES[4], "172.20.50.158");
+    strcpy( NODES[5], "172.20.50.162");
+    strcpy( NODES[6], "172.20.50.148");
+    strcpy( NODES[7], "172.20.50.139");
+    strcpy( NODES[8], "172.20.50.154");
+    strcpy( NODES[9], "172.20.50.140");
+    strcpy( NODES[10], "172.20.50.146");
+    strcpy( NODES[11], "172.20.50.165");
+    strcpy( NODES[12], "172.20.50.150");
+    strcpy( NODES[13], "172.20.50.145");
+    strcpy( NODES[14], "172.20.50.160");
+    strcpy( NODES[15], "172.20.50.144");
+    strcpy( NODES[16], "172.20.50.152");
+    strcpy( NODES[17], "172.20.50.147");
+    strcpy( NODES[18], "172.20.50.161");
+    strcpy( NODES[19], "172.20.50.159");
     // edges
     for_(i, 0, N){
         for_(j, 0, N){
