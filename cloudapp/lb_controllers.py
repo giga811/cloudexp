@@ -113,6 +113,12 @@ def brs(x):
 
     return str(x)
 
-
-
-
+rr_index = 0
+@app.route('/rr/<int:x>')
+def rr(x):
+    global NODES, rr_index, N
+    if rr_index > N:
+        rr_index = 0
+    rr_index += 1
+    send_req(rr_index, x)
+    return str(x)

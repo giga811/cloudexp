@@ -116,3 +116,17 @@ sudo start|stop|restart cloudapp
 6. lbaas setup
 
 assigning floating ip for lb is done in "Access and Security" -> "Floating IP" section
+
+Run experiment on 20 server, ROUND_ROBIN
+
+7. BRS implementation
+tried to write biased random sample on flask
+request overhead was too much
+
+rewriting on c
+
+using libcurl and pthread
+```
+sudo apt-get install libcurl3-devel
+gcc lb-server.c $(pkg-config --libs --cflags libcurl) -pthread -o server
+```
