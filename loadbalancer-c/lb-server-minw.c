@@ -32,6 +32,7 @@ void *send_recv_message(void *socket);
 void round_robin(int x);
 void biased_random_sample(int x);
 void send_req(int index, int x);
+void lb_min_weight(int x);
 
 // some globals for lb
 int a = 0;
@@ -218,7 +219,7 @@ void *send_recv_message(void *socket){
     sscanf(firstline, "%s /%d %s", &tmp, &x, &tmp);
     // printf("Scanned x is %d\n", x);
 
-    biased_random_sample(x);
+    lb_min_weight(x);
 
     /* パケット送信 */
     char message[] = "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\nOK\n";

@@ -12,6 +12,7 @@ char *NODES[N];
 char *STRX[100];
 int EDGES[N][N];
 int W = 5;
+int WEIGHT = 200;
 
 char* itoa(int val, int base){
 
@@ -85,25 +86,27 @@ int count_edge(int this_node){
 int random_sample(){
     int start_node = rand() % N;
     int end_node = start_node;
-    int i = 0;
+    int i = 0, j = 0;
+
     for_(i, 0, W){
-        int r = rand() % N;
-        int walk = 0;
-        while( EDGES[end_node][walk] != 1)
-            walk ++;
-        while( r != 0){
-            walk++;
-            if( walk >= N)
-                walk = 0;
-            if( EDGES[end_node][walk] == 1)
-                r--;
+        int count = count_edge(end_node);
+        int r = rand() % count + 1;
+        int w = 0;
+        for_(j, 0, N){
+            if (EDGES[end_node][j] == 1){
+                w++;
+            }
+            if (w == r)
+                break;
         }
-        end_node = walk;
+        end_node = j;
     }
     return end_node;
 }
 
 void deledge(int n1, int n2){
+    if (count_edge(n1) <= 1 || count_edge(n2) <= 1)
+        return;
     if (n1 == n2)
         return;
     EDGES[n1][n2] = 0;
@@ -154,8 +157,9 @@ void biased_random_sample(int x){
     // random_sample
 
     int sample_node = random_sample();
+    printf("%d,%d\n",sample_node, x );
 
-    int load_n = (int)( x / 200.0 * N);
+    int load_n = (int)( (float)x / WEIGHT * N);
 
     decrement(sample_node, load_n);
 
@@ -174,7 +178,13 @@ int main(){
     //     printf("%d\n", random_sample());
     // }
 
-    biased_random_sample(50);
+    // biased_random_sample(50);
+
+    int rs = 0;
+    for(i=0; i < 10; i++){
+        rs = random_sample();
+        printf("%d,", rs);
+    }
 
 
     return 0;

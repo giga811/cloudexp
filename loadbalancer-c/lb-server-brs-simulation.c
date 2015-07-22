@@ -19,6 +19,8 @@
 
 #include <curl/curl.h>
 #include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 
 #define BUFFER_SIZE 1024
@@ -32,6 +34,7 @@ void *send_recv_message(void *socket);
 void round_robin(int x);
 void biased_random_sample(int x);
 void send_req(int index, int x);
+void lb_min_weight(int x);
 
 // some globals for lb
 int a = 0;
@@ -40,7 +43,7 @@ char *NODES[N];
 char *STRX[100];
 int EDGES[N][N];
 int W = 5;
-int WEIGHT = 200;
+int WEIGHT = 250;
 int NODES_W[N];
 
 int RR_INDEX = 0;
@@ -112,10 +115,6 @@ void prerun(){
 
         }
     }
-    // nodes_w
-    for_(i, 0, N){
-        NODES_W[i] = 0;
-    }
     printf("Prerun Finished.\n");
 }
 
@@ -125,13 +124,13 @@ int main(int argc, char *argv[])
     // prerun
     prerun();
 
-    // Checking Arguments
-    if(argc < 2){
-        printf("Insufficient arguments.\nUsage: %s [WEIGHT]\n", argv[0]);
-        return 1;
-    }
-    /* WEIGHT from arguments */
-    WEIGHT = atoi(argv[1]);
+    // // Checking Arguments
+    // if(argc < 2){
+    //     printf("Insufficient arguments.\nUsage: %s [WEIGHT]\n", argv[0]);
+    //     return 1;
+    // }
+    // /* WEIGHT from arguments */
+    // WEIGHT = atoi(argv[1]);
 
     // Declaring variables
     int srcSocket;    // server socket
@@ -218,7 +217,7 @@ void *send_recv_message(void *socket){
     sscanf(firstline, "%s /%d %s", &tmp, &x, &tmp);
     // printf("Scanned x is %d\n", x);
 
-    biased_random_sample(x);
+    lb_min_weight(x);
 
     /* パケット送信 */
     char message[] = "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\nOK\n";
@@ -230,50 +229,6 @@ void *send_recv_message(void *socket){
     free(buffer);
     free(firstline);
     pthread_exit((void *) 0);
-}
-
-void send_req(int index, int x){
-    CURL *curl;
-    CURLcode res;
-
-    char *url;
-    url = (char *)calloc(80, sizeof(char));
-    strcpy(url, "http://");
-    strcat(url, NODES[index]);
-    strcat(url, "/exp/exp1/req/");
-    strcat(url, STRX[x-1]);
-
-    curl = curl_easy_init();
-    if(curl) {
-        // printf(">>>Sending request to %s\n", url);
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        /* example.com is redirected, so we tell libcurl to follow redirection */
-        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-        /* Perform the request, res will get the return code */
-        res = curl_easy_perform(curl);
-        /* Check for errors */
-        if(res != CURLE_OK)
-          fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                  curl_easy_strerror(res));
-
-        /* always cleanup */
-        curl_easy_cleanup(curl);
-    }
-    // printf("<<<Received request from %s\n", url);
-    free(url);
-    return;
-
-}
-
-void round_robin(int x){
-    if (RR_INDEX >= N){
-        RR_INDEX = 0;
-    }
-    // printf("RR index=%d, x=%d\n", RR_INDEX, x);
-    send_req(RR_INDEX, x);
-    RR_INDEX ++;
-    return;
 }
 
 /*
@@ -363,6 +318,8 @@ void decrement(int this_node, int n){
     return;
 }
 void send_req_test(int sample_node, int x){
+    int t = (int)(11.18 * x + 105.94) * 1000;
+    usleep(t);
     // printf("Send req to %d / %d\n", sample_node, x);
     return;
 }
@@ -372,13 +329,14 @@ void biased_random_sample(int x){
     // random_sample
 
     int sample_node = random_sample();
-    // printf("##%d,%d\n",sample_node, x );
+    printf("%d,%d\n",sample_node, x );
+    fflush(stdout);
 
     int load_n = (int)( (float)x / WEIGHT * N);
 
     decrement(sample_node, load_n);
 
-    send_req(sample_node, x);
+    send_req_test(sample_node, x);
 
     increment(sample_node, load_n);
 
@@ -403,9 +361,12 @@ int find_min_weight(){
 void lb_min_weight(int x){
     int min_index = find_min_weight();
 
+    printf("%d,%d\n",min_index, x );
+    fflush(stdout);
+
     NODES_W[min_index] += x;
 
-    send_req(min_index, x);
+    send_req_test(min_index, x);
 
     NODES_W[min_index] -= x;
 
