@@ -2,6 +2,8 @@
 """
 2015/07/10
 CloudApp
+
+updated 2015/12/24
 """
 
 # flask imports
@@ -17,8 +19,8 @@ import requests as rq
 
 # lb variables
 
-NODES=["10.0.100." + str(i) for i in range(3, 23)]
-NODES.remove("10.0.100.18")
+NODES=["10.0.100." + str(i) for i in range(3, 13)]
+
 # NODES = ["172.20.50.139", "172.20.50.140"] * 10
 N = len(NODES)
 
@@ -117,8 +119,8 @@ rr_index = 0
 @app.route('/rr/<int:x>')
 def rr(x):
     global NODES, rr_index, N
+    rr_index += 1
     if rr_index > N:
         rr_index = 0
-    rr_index += 1
     send_req(rr_index, x)
     return str(x)

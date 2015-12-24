@@ -130,3 +130,9 @@ using libcurl and pthread
 sudo apt-get install libcurl3-devel
 gcc lb-server.c $(pkg-config --libs --cflags libcurl) -pthread -o server
 ```
+
+-- Load Model
+http://fooplot.com/plot/579yb0yzwi
+
+e ^ ( - (x - 30)^2 / (2 * 100)) / (10 * sqrt(2*pi) )
+e ^ ( - (x - mu)^2 / (2 * sigma^2)) / (sigma * sqrt(2*pi) )
