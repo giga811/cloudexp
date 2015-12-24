@@ -120,7 +120,7 @@ rr_index = 0
 def rr(x):
     global NODES, rr_index, N
     rr_index += 1
-    if rr_index > N:
+    if rr_index >= N:
         rr_index = 0
     send_req(rr_index, x)
     return str(x)
