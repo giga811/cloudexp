@@ -7,7 +7,7 @@ CloudApp
 # flask imports
 from flask import Flask
 from flask import request, render_template, send_from_directory
-import json, os
+import json, os, time
 
 # user imports
 from cloudapp import app
@@ -93,7 +93,13 @@ def exp_exp1(x):
 
     # calculation using x
     result = calculation(x)
-
     message = """Calculation {x}\n""".format(x=x)
+    return str(x)
+
+@app.route('/exp/exp2/req/<int:x>')
+def exp_exp2(x):
+    # wait 10 * x ms then return
+    message = """Sleep {t}\n""".format(t=10 * x)
+    time.sleep(10.0 * x / 1000)
     return str(x)
 
